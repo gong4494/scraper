@@ -1,7 +1,7 @@
-const express = require('express')
+const express = require('express');
 const axios = require('axios'); 
 const cheerio = require('cheerio'); 
-
+const _ = require('lodash');
 const app = express()
 const port = 3000
 
@@ -12,14 +12,19 @@ app.get('/', (req, res) => {
         .then(({ data }) => { 
             const $ = cheerio.load(data); 
     
-            const bulletins = $('#recent_bulletins') 
-                .map((_, product) => { 
-                    const $product = $(product); 
-                    return $product.text() 
+            const bulletins = $('.current') 
+                .map((index, element) => { 
+                    return {
+                        link: $(element).find('a').text(),
+                        href: $(element).find('a').attr('href'),
+                      }
                 }) 
                 .toArray(); 
             console.log(bulletins) 
-            res.send(`${bulletins}`)
+           
+            res.send(bulletins.map((bulletin) => {
+                return `${bulletin.link} is available`
+            }))
         });
   
 })
