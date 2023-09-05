@@ -21,11 +21,10 @@ app.get('/', async (req, res) => {
             }
         })
         .toArray();
-    console.log(bulletins);
     await save(bulletins);
     const result = await getAll();
-    console.log(`result: ${result}`)
-    res.send(`bulletins: ${JSON.stringify(result, null, 2)}`)
+    console.log(`result: ${JSON.stringify(result, null, 2)}`)
+    res.send(result)
 });
 
 const save = async (list) => {
@@ -53,7 +52,6 @@ const getBulletins = () => {
     return new Promise((resolve, reject) => {
         axios.get('https://travel.state.gov/content/travel/en/legal/visa-law0/visa-bulletin.html')
             .then(function ({ data }) {
-                console.log(data, 'data');
                 resolve(data);
             })
             .catch(function (error) {
