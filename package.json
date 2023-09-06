@@ -13,7 +13,9 @@
     "axios": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
     "express": "^4.18.2",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "nodemailer": "^6.9.5",
+    "nodemailer-smtp-transport": "^2.7.4"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

@@ -2,6 +2,8 @@ const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const _ = require('lodash');
+const nodemailer = require('nodemailer');
+const smtp = require('nodemailer-smtp-transport');
 
 const CyclicDB = require('@cyclic.sh/dynamodb')
 const db = CyclicDB('tame-mite-houndstoothCyclicDB')
@@ -24,6 +26,12 @@ app.get('/', async (req, res) => {
     await save(bulletins);
     const result = await getAll();
     console.log(`result: ${JSON.stringify(result, null, 2)}`)
+    // const target = _.find(result, { key: 'October2023' });
+    const target = _.find(result, { key: 'ComingSoon' });
+
+    if (target) {
+        await send(`October2023 is available ${target}`);
+    }
     res.send(result)
 });
 
@@ -40,11 +48,40 @@ const getAll = async () => {
     const items = await db.collection('bulletins').list()
     console.log("in get", JSON.stringify(items, null, 2))
     const itemDetails = []
-    for(item of items.results){
+    for (item of items.results) {
         const detail = await db.collection('bulletins').get(item.key)
         itemDetails.push(detail)
     }
     return itemDetails
+}
+
+const send = async (message) => {
+    const username = process.env.SMTP_USERNAME || null
+    const password = process.env.SMTP_PASSWORD || null
+    if (!username || !password) {
+        throw new Error('SMTP_USERNAME and SMTP_PASSWORD must be set')
+    }
+
+
+    const transporter = nodemailer.createTransport(smtp({
+        service: 'gmail',
+        auth: {
+            user: username,
+            pass: password
+        }
+    }));
+
+    const text = `Just saying hello. \n\n- Your friend, ${username}` + message;
+
+    var mailOptions = {
+        from: username,
+        to: 'dangonggm@gmail.com',
+        // bcc: '<bcc email addres>',
+        subject: 'starter-nodemailer',
+        text
+    };
+
+    const sendRes = await transporter.sendMail(mailOptions);
 }
 
 
