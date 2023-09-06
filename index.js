@@ -19,15 +19,15 @@ app.get('/', async (req, res) => {
         .map((index, element) => {
             return {
                 text: $(element).find('a').text(),
-                link: $(element).find('a').attr('href'),
+                link: 'https://travel.state.gov' + $(element).find('a').attr('href'),
             }
         })
         .toArray();
     await save(bulletins);
     const result = await getAll();
     console.log(`result: ${JSON.stringify(result, null, 2)}`)
-    // const target = _.find(result, { key: 'October2023' });
-    const target = _.find(result, { key: 'ComingSoon' });
+    const target = _.find(result, { key: 'October2023' });
+    // const target = _.find(result, { key: 'ComingSoon' });
 
     if (target) {
         await send(`October2023 is available ${JSON.stringify(target, null, 2)}`);
