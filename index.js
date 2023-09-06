@@ -30,7 +30,7 @@ app.get('/', async (req, res) => {
     const target = _.find(result, { key: 'ComingSoon' });
 
     if (target) {
-        await send(`October2023 is available ${target}`);
+        await send(`October2023 is available ${JSON.stringify(target, null, 2)}`);
     }
     res.send(result)
 });
@@ -56,8 +56,8 @@ const getAll = async () => {
 }
 
 const send = async (message) => {
-    const username = process.env.SMTP_USERNAME || null
-    const password = process.env.SMTP_PASSWORD || null
+    const username = 'dangonggm@gmail.com'
+    const password = 'ypkhxuenrgaoyyij'
     if (!username || !password) {
         throw new Error('SMTP_USERNAME and SMTP_PASSWORD must be set')
     }
@@ -71,7 +71,7 @@ const send = async (message) => {
         }
     }));
 
-    const text = `Just saying hello. \n\n- Your friend, ${username}` + message;
+    const text = `Just saying hello. \n` + message + '\n\n- Your friend, ${username}\n';
 
     var mailOptions = {
         from: username,
