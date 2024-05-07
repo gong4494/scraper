@@ -26,11 +26,11 @@ app.get('/', async (req, res) => {
     await save(bulletins);
     const result = await getAll();
     console.log(`result: ${JSON.stringify(result, null, 2)}`)
-    const target = _.find(result, { key: 'June2024' });
+    const target = _.find(result, { key: 'July2024' });
     // const target = _.find(result, { key: 'ComingSoon' });
 
     if (target) {
-        await send(`JUNE 2024 is available ${JSON.stringify(target, null, 2)}`);
+        await send(`July 2024 is available ${JSON.stringify(target, null, 2)}`);
     }
     res.send(result)
 });
